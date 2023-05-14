@@ -1,27 +1,51 @@
 package com.todoapp.todo.controller;
 
 import com.todoapp.todo.entity.Task;
-import com.todoapp.todo.repository.TaskRepository;
+import com.todoapp.todo.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/tasks")
 public class TaskController {
-    private final TaskRepository taskRepository;
+    private final TaskService taskService;
 
-    public TaskController(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    @Autowired
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
-    @GetMapping("/tasks")
-    public List<Task> getAllTasks(){
-        return taskRepository.findAll();
+    @PostMapping
+    public Task createTask(@RequestBody Task task, @RequestParam String userEmail) {
+        return taskService.addTaskToUser(userEmail, task.getTitle(), task.getDescription());
     }
 
-    @PostMapping("/task")
-    public Task createTask(@RequestBody Task task) {
-        return taskRepository.save(task);
+    @GetMapping
+    public List<Task> getAllTasks() {
+        return taskService.getAllTasks();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+        return taskService.getTaskById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
+        task.setId(id);
+        return taskService.updateTask(task);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
