@@ -8,9 +8,7 @@ const TaskList = () => {
   const taskEndpoint = `${API_URL}/tasks`;
 
   const tasks = useAppSelector((state) => state.task.tasks);
-  const { tasks: tasksFetched, isLoading, error } = useFetchTasks(taskEndpoint);
-
-  console.log(tasks);
+  useFetchTasks(taskEndpoint);
 
   return (
     <div className={styles.container}>

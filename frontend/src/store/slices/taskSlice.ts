@@ -3,10 +3,12 @@ import { Task } from "../../types/Task";
 
 export interface TaskState {
   tasks?: Task[];
+  activeTask?: Task;
 }
 
 const initialState: TaskState = {
   tasks: [],
+  activeTask: undefined,
 };
 
 export const taskSlice = createSlice({
@@ -28,8 +30,15 @@ export const taskSlice = createSlice({
         }
       });
     },
+    setActiveTask: (state, action: PayloadAction<Task>) => {
+      state.activeTask = action.payload;
+    },
+    clearActiveTask: (state) => {
+      state.activeTask = undefined;
+    },
   },
 });
 
-export const { updateTasks } = taskSlice.actions;
+export const { updateTasks, setActiveTask, clearActiveTask } =
+  taskSlice.actions;
 export default taskSlice.reducer;

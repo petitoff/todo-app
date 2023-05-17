@@ -1,0 +1,29 @@
+.inputContainer {
+  position: relative;
+
+  & h2 {
+    font-size: 1.5rem;
+    color: #bfbfbf;
+  }
+}
+
+.gradientInput {
+  background: none;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid transparent;
+  background-image: linear-gradient(to right, #fe1e9a, #254dde);
+  background-size: 100% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s;
+  font-size: 1.7rem;
+
+  &:focus {
+    background-size: 0 2px;
+  }
+
+  &::placeholder {
+    color: #bfbfbf;
+  }
+}

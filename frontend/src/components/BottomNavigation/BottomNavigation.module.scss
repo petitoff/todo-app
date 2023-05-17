@@ -1,0 +1,32 @@
+.container {
+  // fixed bottom position and centered
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  transition: all 0.3s ease-in-out;
+
+  .roundedButton {
+    background-image: linear-gradient(to bottom, #00ffff 0%, #254dde 100%);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    height: 60px;
+    width: 60px;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s;
+  }
+}

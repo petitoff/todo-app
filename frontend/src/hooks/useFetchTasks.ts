@@ -35,7 +35,7 @@ const useFetchTasks = (apiEndpoint: string) => {
     };
 
     fetchTasks();
-  }, [apiEndpoint]);
+  }, [apiEndpoint, dispatch]);
 
   return { tasks, isLoading, error };
 };

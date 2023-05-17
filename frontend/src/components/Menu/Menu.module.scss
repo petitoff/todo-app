@@ -1,0 +1,17 @@
+.menuContainer {
+  width: 70vw;
+  transition: all 0.5s ease-in-out;
+
+  & ul {
+    list-style: none;
+
+    .customLink {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+  @media (max-width: 593px) {
+    width: 100vw;
+  }
+}
