@@ -1,0 +1,9 @@
+.homePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .homePageView {
+    width: clamp(300px, 100%, 768px);
+  }
+}

@@ -1,8 +1,16 @@
-import React from "react";
-import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import "./styles/Global.scss";
+import HomePage from "./Pages/HomePage";
 
 function App() {
-  return <div></div>;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" index element={<HomePage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
