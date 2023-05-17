@@ -5,6 +5,7 @@ import com.todoapp.todo.entity.User;
 import com.todoapp.todo.service.TaskService;
 import com.todoapp.todo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,15 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<User> loginUser(@RequestBody User user) {
+        User authenticatedUser = userService.authenticateUser(user);
+        if (authenticatedUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(authenticatedUser);
     }
 
     @GetMapping("/{userId}/tasks")

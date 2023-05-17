@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/tasks")
+@CrossOrigin(origins = "http://localhost:3000") // Allow requests from the React app running on localhost:3000
 public class TaskController {
     private final TaskService taskService;
 
@@ -46,6 +47,5 @@ public class TaskController {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
-
 
 }
