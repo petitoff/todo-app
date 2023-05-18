@@ -21,7 +21,7 @@ public class TaskController {
 
     @PostMapping
     public Task createTask(@RequestBody Task task, @RequestParam String userEmail) {
-        return taskService.addTaskToUser(userEmail, task.getTitle(), task.getDescription());
+        return taskService.addTaskToUser(userEmail, task.getTitle(), task.getDescription(), task.getDeadline());
     }
 
     @GetMapping

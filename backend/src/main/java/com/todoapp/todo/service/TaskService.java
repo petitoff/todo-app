@@ -7,6 +7,7 @@ import com.todoapp.todo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class TaskService {
         return taskRepository.findAllByUserId(userId);
     }
 
-    public Task addTaskToUser(String userEmail, String taskTitle, String taskDescription) {
+    public Task addTaskToUser(String userEmail, String taskTitle, String taskDescription, LocalDateTime deadline) {
         // Find the user by email
         User userAccount = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -54,6 +55,7 @@ public class TaskService {
         Task task = new Task();
         task.setTitle(taskTitle);
         task.setDescription(taskDescription);
+        task.setDeadline(deadline); // Set the deadline
 
         // Assign the task to the user
         task.setUser(userAccount);

@@ -2,6 +2,8 @@ package com.todoapp.todo.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Task {
     @Id
@@ -10,7 +12,7 @@ public class Task {
     private String title;
     private String description;
     private boolean completed;
-
+    private LocalDateTime deadline;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -45,5 +47,21 @@ public class Task {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public LocalDateTime getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
     }
 }

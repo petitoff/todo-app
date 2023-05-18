@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@CrossOrigin(origins = "http://localhost:3000") // Allow requests from the React app running on localhost:3000
 public class UserController {
     private final UserService userService;
     private final TaskService taskService;
