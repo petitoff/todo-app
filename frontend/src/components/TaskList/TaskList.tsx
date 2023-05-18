@@ -20,7 +20,6 @@ const TaskList = () => {
           time="10:00"
         />
       ))}
-      <TaskCard title="Task 1" date="2021-10-01" time="10:00" />
     </div>
   );
 };
