@@ -24,17 +24,27 @@ const Menu = () => {
             Home
           </Link>
         </li>
-        <li>
-          {isAuth ? (
+
+        {isAuth ? (
+          <li>
             <div onClick={handleLogout} className={styles.customLink}>
               Logout
             </div>
-          ) : (
-            <Link to="/login" className={styles.customLink}>
-              Login
-            </Link>
-          )}
-        </li>
+          </li>
+        ) : (
+          <>
+            <li>
+              <Link to="/login" className={styles.customLink}>
+                Login
+              </Link>
+            </li>
+            <li>
+              <Link to="/signup" className={styles.customLink}>
+                Signup
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
     </nav>
   );

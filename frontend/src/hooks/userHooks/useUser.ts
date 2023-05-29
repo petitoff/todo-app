@@ -12,8 +12,10 @@ const useUser = (API_URL: string) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const createUser = useMutation(async (user: User) => {
+  const createUser = useMutation(async (user: Partial<User>) => {
     const { data } = await axios.post(`${API_URL}/users`, user);
+
+    console.log(data);
     return data.id;
   });
 

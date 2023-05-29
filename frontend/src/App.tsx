@@ -3,6 +3,7 @@ import "./styles/Global.scss";
 import HomePage from "./Pages/Home/HomePage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import LoginPage from "./Pages/Login/LoginPage";
+import SignupPage from "./Pages/Signup/SignupPage";
 
 const theme = createTheme();
 
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" index element={<HomePage />} />
 
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
         </Routes>
       </Router>
     </ThemeProvider>
