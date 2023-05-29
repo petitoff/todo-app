@@ -1,6 +1,6 @@
 import styles from "./TaskList.module.scss";
 import TaskCard from "../TaskCard/TaskCard";
-import useFetchTasks from "../../hooks/useFetchTasks";
+import useFetchTasks from "../../hooks/tasksHooks/useFetchTasks";
 import { API_URL } from "../../config";
 import { useAppSelector } from "../../hooks/hooks";
 
@@ -13,12 +13,7 @@ const TaskList = () => {
   return (
     <div className={styles.container}>
       {tasks?.map((task) => (
-        <TaskCard
-          key={task.id}
-          title={task.title}
-          date="2021-10-01"
-          time="10:00"
-        />
+        <TaskCard key={task.id} task={task} />
       ))}
     </div>
   );

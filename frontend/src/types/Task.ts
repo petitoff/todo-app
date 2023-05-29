@@ -1,5 +1,10 @@
+import { User } from "./User";
+
 export type Task = {
-  id: string;
+  id: number;
   title: string;
-  description: string;
+  description?: string;
+  completed: boolean;
+  deadline?: string;
+  user: User;
 };

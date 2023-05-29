@@ -8,6 +8,9 @@ import CustomDrawer from "../../components/common/CustomDrawer/CustomDrawer";
 import { PanelName, toggleSidebar } from "../../store/slices/sidebarSlice";
 import Menu from "../../components/Menu/Menu";
 import NewTaskForm from "../../components/NewTaskForm/NewTaskForm";
+import useTask from "../../hooks/tasksHooks/useTask";
+import { API_URL } from "../../config";
+import { clearActiveTask } from "../../store/slices/taskSlice";
 
 const HomePage = () => {
   const activeTask = useAppSelector((state) => state.task.activeTask);
@@ -18,8 +21,16 @@ const HomePage = () => {
 
   const dispatch = useAppDispatch();
 
+  const { deleteTask } = useTask(API_URL);
+
   const handleCloseSidebar = () => {
     dispatch(toggleSidebar());
+  };
+
+  const handleDeleteTask = () => {
+    deleteTask(activeTask?.id!);
+
+    dispatch(clearActiveTask());
   };
 
   return (
@@ -38,6 +49,8 @@ const HomePage = () => {
 
       <Modal isOpen={!!activeTask}>
         <h2>{activeTask?.title}</h2>
+        <p>{activeTask?.description}</p>
+        <button onClick={handleDeleteTask}>Delete task</button>
       </Modal>
     </>
   );

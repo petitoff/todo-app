@@ -1,27 +1,39 @@
 import { useAppDispatch } from "../../hooks/hooks";
-import { setActiveTask } from "../../store/slices/taskSlice";
+import { getTaskByIdAndSetItToActiveTask } from "../../store/slices/taskSlice";
 import { Task } from "../../types/Task";
 import styles from "./TaskCard.module.scss";
 
 interface Props {
-  title: string;
-  date: string;
-  time: string;
+  task: Task;
 }
 
-const TaskCard = ({ title, date, time }: Props) => {
+const TaskCard = ({ task }: Props) => {
   const dispatch = useAppDispatch();
 
   const handleSetActiveTask = () => {
-    dispatch(setActiveTask({ title } as Task));
+    dispatch(getTaskByIdAndSetItToActiveTask(task.id));
+  };
+
+  const formatDate = (isoDateString?: string) => {
+    if (!isoDateString) return;
+
+    const date = new Date(isoDateString);
+    return date.toLocaleDateString();
+  };
+
+  const formatTime = (isoDateString?: string) => {
+    if (!isoDateString) return;
+
+    const date = new Date(isoDateString);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
     <div className={styles.container} onClick={handleSetActiveTask}>
-      <p>{title}</p>
+      <h2>{task.title}</h2>
       <div>
-        <p>{date}</p>
-        <p>{time}</p>
+        <p>{formatDate(task.deadline)}</p>
+        <p>{formatTime(task.deadline)}</p>
       </div>
     </div>
   );

@@ -15,8 +15,24 @@ export const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
+    updateTask: (state, action: PayloadAction<Task>) => {
+      const newTask = action.payload;
+      const existingTaskIndex = state.tasks?.findIndex(
+        (task) => task.id === newTask.id
+      );
+
+      if (existingTaskIndex !== undefined && existingTaskIndex !== -1) {
+        // Replace the existing task with the new task
+        state.tasks![existingTaskIndex] = newTask;
+      } else {
+        // Add the new task to the existing tasks
+        state.tasks?.push(newTask);
+      }
+    },
     updateTasks: (state, action: PayloadAction<Task[]>) => {
-      action.payload.forEach((newTask) => {
+      const newTasks = action.payload;
+
+      newTasks.forEach((newTask) => {
         const existingTaskIndex = state.tasks?.findIndex(
           (task) => task.id === newTask.id
         );
@@ -30,6 +46,13 @@ export const taskSlice = createSlice({
         }
       });
     },
+    removeTask: (state, action: PayloadAction<number>) => {
+      state.tasks = state.tasks?.filter((task) => task.id !== action.payload);
+    },
+    getTaskByIdAndSetItToActiveTask: (state, action: PayloadAction<number>) => {
+      const task = state.tasks?.find((task) => task.id === action.payload);
+      state.activeTask = task;
+    },
     setActiveTask: (state, action: PayloadAction<Task>) => {
       state.activeTask = action.payload;
     },
@@ -39,6 +62,12 @@ export const taskSlice = createSlice({
   },
 });
 
-export const { updateTasks, setActiveTask, clearActiveTask } =
-  taskSlice.actions;
+export const {
+  updateTask,
+  updateTasks,
+  removeTask,
+  getTaskByIdAndSetItToActiveTask,
+  setActiveTask,
+  clearActiveTask,
+} = taskSlice.actions;
 export default taskSlice.reducer;

@@ -5,9 +5,14 @@
   & ul {
     list-style: none;
 
-    .customLink {
-      text-decoration: none;
-      color: inherit;
+    & li {
+      .customLink {
+        font-size: 2.2rem;
+        text-decoration: none;
+        color: inherit;
+        padding: 0.2rem 0;
+        cursor: pointer;
+      }
     }
   }
 

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { updateTasks } from "../store/slices/taskSlice";
+import { updateTasks } from "../../store/slices/taskSlice";
 
 interface Task {
   id: number;
