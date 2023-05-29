@@ -31,6 +31,19 @@ const useTask = (API_URL: string) => {
     }
   );
 
+  const updateTaskMutation = useMutation(
+    async (taskData: Partial<Task>) => {
+      const response = await axios.put(`${BASE_URL}/${taskData.id}`, taskData);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        // Update tasks in the Redux store
+        dispatch(updateTask(data));
+      },
+    }
+  );
+
   const deleteTaskMutation = useMutation(
     async (taskId: number) => {
       await axios.delete(`${BASE_URL}/${taskId}`);
@@ -44,7 +57,10 @@ const useTask = (API_URL: string) => {
     }
   );
 
-  const createTask = async (userEmail: string, taskData: Partial<Task>) => {
+  const createTaskExistingTask = async (
+    userEmail: string,
+    taskData: Partial<Task>
+  ) => {
     try {
       await createTaskMutation.mutateAsync({ userEmail, taskData });
     } catch (error) {
@@ -52,7 +68,15 @@ const useTask = (API_URL: string) => {
     }
   };
 
-  const deleteTask = async (taskId: number) => {
+  const updateTaskExistingTask = async (taskData: Partial<Task>) => {
+    try {
+      await updateTaskMutation.mutateAsync(taskData);
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
+
+  const deleteTaskExistingTask = async (taskId: number) => {
     try {
       await deleteTaskMutation.mutateAsync(taskId);
     } catch (error) {
@@ -61,10 +85,17 @@ const useTask = (API_URL: string) => {
   };
 
   return {
-    createTask,
-    deleteTask,
-    isLoading: createTaskMutation.isLoading || deleteTaskMutation.isLoading,
-    error: createTaskMutation.error || deleteTaskMutation.error,
+    createTask: createTaskExistingTask,
+    updateTask: updateTaskExistingTask,
+    deleteTask: deleteTaskExistingTask,
+    isLoading:
+      createTaskMutation.isLoading ||
+      deleteTaskMutation.isLoading ||
+      updateTaskMutation.isLoading,
+    error:
+      createTaskMutation.error ||
+      deleteTaskMutation.error ||
+      updateTaskMutation.error,
   };
 };
 

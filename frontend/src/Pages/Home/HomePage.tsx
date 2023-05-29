@@ -11,6 +11,7 @@ import NewTaskForm from "../../components/NewTaskForm/NewTaskForm";
 import useTask from "../../hooks/tasksHooks/useTask";
 import { API_URL } from "../../config";
 import { clearActiveTask } from "../../store/slices/taskSlice";
+import { useEffect, useState } from "react";
 
 const HomePage = () => {
   const activeTask = useAppSelector((state) => state.task.activeTask);
@@ -19,9 +20,12 @@ const HomePage = () => {
     (state) => state.sidebar.panelName
   );
 
+  const [title, setTitle] = useState(activeTask?.title ?? "");
+  const [description, setDescription] = useState(activeTask?.description ?? "");
+
   const dispatch = useAppDispatch();
 
-  const { deleteTask } = useTask(API_URL);
+  const { deleteTask, updateTask } = useTask(API_URL);
 
   const handleCloseSidebar = () => {
     dispatch(toggleSidebar());
@@ -32,6 +36,21 @@ const HomePage = () => {
 
     dispatch(clearActiveTask());
   };
+
+  const handleUpdateTask = () => {
+    const task = { ...activeTask, title, description };
+
+    console.log(task);
+
+    updateTask(task);
+
+    dispatch(clearActiveTask());
+  };
+
+  useEffect(() => {
+    activeTask?.title && setTitle(activeTask?.title);
+    activeTask?.description && setDescription(activeTask?.description);
+  }, [activeTask]);
 
   return (
     <>
@@ -48,9 +67,18 @@ const HomePage = () => {
       </CustomDrawer>
 
       <Modal isOpen={!!activeTask}>
-        <h2>{activeTask?.title}</h2>
-        <p>{activeTask?.description}</p>
-        <button onClick={handleDeleteTask}>Delete task</button>
+        <div className={styles["modal-container"]}>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} />
+
+          <textarea
+            className={styles["text-area"]}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+
+          <button onClick={handleDeleteTask}>Delete task</button>
+          <button onClick={handleUpdateTask}>Update task</button>
+        </div>
       </Modal>
     </>
   );
