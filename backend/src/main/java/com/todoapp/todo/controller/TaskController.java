@@ -1,6 +1,7 @@
 package com.todoapp.todo.controller;
 
 import com.todoapp.todo.entity.Task;
+import com.todoapp.todo.exception.TaskNotFoundException;
 import com.todoapp.todo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-        Task currentTask = taskService.getTaskById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+        Task currentTask = taskService.getTaskById(id).orElseThrow(() -> new TaskNotFoundException("Task not found with ID" + id));
 
         currentTask.setTitle(task.getTitle());
         currentTask.setDescription(task.getDescription());
