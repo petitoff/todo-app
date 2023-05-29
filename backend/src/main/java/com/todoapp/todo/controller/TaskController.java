@@ -38,8 +38,13 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-        task.setId(id);
-        return taskService.updateTask(task);
+        Task currentTask = taskService.getTaskById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+
+        currentTask.setTitle(task.getTitle());
+        currentTask.setDescription(task.getDescription());
+        currentTask.setDeadline(task.getDeadline());
+
+        return taskService.updateTask(currentTask);
     }
 
     @DeleteMapping("/{id}")
