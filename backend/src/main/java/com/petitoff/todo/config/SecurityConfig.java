@@ -40,7 +40,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/api/v1/auth/**",
-                        "/v2/api-docs",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
                         "/swagger-resources",
@@ -52,6 +51,7 @@ public class SecurityConfig {
                         "/swagger-ui.html"
                 )
                 .permitAll()
+
 
                 .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
                 .requestMatchers("/api/v1/tasks/**").authenticated()
