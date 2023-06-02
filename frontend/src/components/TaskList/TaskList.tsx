@@ -5,12 +5,12 @@ import { useAppSelector } from "../../hooks/hooks";
 import useFetchUserTasks from "../../hooks/tasksHooks/useFetchUserTasks";
 
 const TaskList = () => {
-  const user = useAppSelector((state) => state.auth.user);
+  const auth = useAppSelector((state) => state.auth);
   const tasks = useAppSelector((state) => state.task.tasks);
 
-  useFetchUserTasks(user?.id, API_URL);
+  useFetchUserTasks(auth.token, API_URL);
 
-  if (!user) {
+  if (!auth.isAuth) {
     return <div>Please log in to view tasks.</div>;
   }
 

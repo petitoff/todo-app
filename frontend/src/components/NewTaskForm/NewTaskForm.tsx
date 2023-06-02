@@ -30,9 +30,7 @@ const NewTaskForm = () => {
     )
       return;
 
-    console.log(taskData);
-
-    createTask(user.email, taskData);
+    createTask(user?.email, taskData);
 
     dispatch(toggleSidebar());
   };

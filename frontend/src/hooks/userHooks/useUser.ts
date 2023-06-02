@@ -5,6 +5,7 @@ import axios from "axios";
 import { setAuth } from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks";
+import isTokenValid from "../../utils/isTokenValid";
 
 const useUser = (API_URL: string) => {
   const auth = useAppSelector((state) => state.auth.user);
@@ -13,15 +14,26 @@ const useUser = (API_URL: string) => {
   const navigate = useNavigate();
 
   const createUser = useMutation(async (user: Partial<User>) => {
-    const { data } = await axios.post(`${API_URL}/users`, user);
+    const { data } = await axios.post(`${API_URL}/auth/register`, user);
+
+    if (isTokenValid(data.access_token)) {
+      navigate("/login");
+    }
 
     console.log(data);
-    return data.id;
   });
 
   const loginUser = useMutation(async (user: Partial<User>) => {
-    const { data } = await axios.post(`${API_URL}/users/login`, user);
-    dispatch(setAuth(data));
+    const { data } = await axios.post(`${API_URL}/auth/login`, user);
+
+    console.log(data);
+
+    dispatch(
+      setAuth({
+        user: { id: data.id, email: data.email },
+        token: data.access_token,
+      })
+    );
     navigate("/");
   });
 

@@ -6,5 +6,5 @@ export type Task = {
   description?: string;
   completed: boolean;
   deadline?: string;
-  user: User;
+  // user: User;
 };

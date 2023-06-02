@@ -4,27 +4,33 @@ import { useDispatch } from "react-redux";
 import { updateTasks } from "../../store/slices/taskSlice";
 import { Task } from "../../types/Task";
 
-const fetchUserTasks = async (userId: number | undefined, API_URL: string) => {
-  if (!userId) {
+const usefetchUserTasks = async (
+  jwtToken: string | undefined,
+  API_URL: string
+) => {
+  if (!jwtToken) {
     return [];
   }
 
-  const BASE_URL = `${API_URL}/users`;
-  const response = await axios.get(`${BASE_URL}/${userId}/tasks`);
+  const response = await axios.get(`${API_URL}/tasks`, {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  });
   return response.data;
 };
 
-const useFetchUserTasks = (userId: number | undefined, API_URL: string) => {
+const useFetchUserTasks = (jwtToken: string | undefined, API_URL: string) => {
   const dispatch = useDispatch();
 
   const { data, isLoading, error } = useQuery<Task[], Error>(
-    ["userTasks", userId],
-    () => fetchUserTasks(userId, API_URL),
+    ["userTasks", jwtToken],
+    () => usefetchUserTasks(jwtToken, API_URL),
     {
       onSuccess: (tasks) => {
         dispatch(updateTasks(tasks));
       },
-      enabled: !!userId, // Only run the query if userId is defined
+      enabled: !!jwtToken,
     }
   );
 

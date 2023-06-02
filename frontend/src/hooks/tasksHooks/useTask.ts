@@ -3,11 +3,20 @@ import { Task } from "../../types/Task";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { updateTask, removeTask } from "../../store/slices/taskSlice";
+import { useAppSelector } from "../hooks";
 
 const useTask = (API_URL: string) => {
   const BASE_URL = `${API_URL}/tasks`;
+  const token = useAppSelector((state) => state.auth.token);
 
   const dispatch = useDispatch();
+
+  // Create an axios instance with the Authorization header
+  const axiosInstance = axios.create({
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const createTaskMutation = useMutation(
     async ({
@@ -17,7 +26,8 @@ const useTask = (API_URL: string) => {
       userEmail: string;
       taskData: Partial<Task>;
     }) => {
-      const response = await axios.post(
+      // Use axiosInstance instead of axios
+      const response = await axiosInstance.post(
         `${BASE_URL}?userEmail=${encodeURIComponent(userEmail)}`,
         taskData
       );
@@ -33,7 +43,19 @@ const useTask = (API_URL: string) => {
 
   const updateTaskMutation = useMutation(
     async (taskData: Partial<Task>) => {
-      const response = await axios.put(`${BASE_URL}/${taskData.id}`, taskData);
+      // Use axiosInstance instead of axios
+      const taskDataLocal: Partial<Task> = {
+        id: taskData.id,
+        title: taskData.title,
+        description: taskData.description,
+        deadline: taskData.deadline,
+        completed: taskData.completed,
+      };
+
+      const response = await axiosInstance.put(
+        `${BASE_URL}/${taskData.id}`,
+        taskDataLocal
+      );
       return response.data;
     },
     {
@@ -46,7 +68,8 @@ const useTask = (API_URL: string) => {
 
   const deleteTaskMutation = useMutation(
     async (taskId: number) => {
-      await axios.delete(`${BASE_URL}/${taskId}`);
+      // Use axiosInstance instead of axios
+      await axiosInstance.delete(`${BASE_URL}/${taskId}`);
       return taskId;
     },
     {
@@ -58,10 +81,14 @@ const useTask = (API_URL: string) => {
   );
 
   const createTaskExistingTask = async (
-    userEmail: string,
-    taskData: Partial<Task>
+    userEmail?: string,
+    taskData?: Partial<Task>
   ) => {
     try {
+      if (!userEmail || !taskData) {
+        throw new Error("Missing user email or task data");
+      }
+
       await createTaskMutation.mutateAsync({ userEmail, taskData });
     } catch (error) {
       console.error("Error creating task:", error);

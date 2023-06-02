@@ -40,8 +40,6 @@ const HomePage = () => {
   const handleUpdateTask = () => {
     const task = { ...activeTask, title, description };
 
-    console.log(task);
-
     updateTask(task);
 
     dispatch(clearActiveTask());
