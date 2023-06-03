@@ -37,14 +37,16 @@ public class TaskService {
         );
     }
 
-    public Task updateTask(Long taskId, Task task, User user) {
+    public TaskDTO updateTask(Long taskId, Task task, User user) {
         Optional<Task> existingTaskOptional = taskRepository.findByIdAndUser(taskId, user);
         if (existingTaskOptional.isPresent()) {
             Task existingTask = existingTaskOptional.get();
             existingTask.setTitle(task.getTitle());
             existingTask.setDescription(task.getDescription());
             existingTask.setCompleted(task.isCompleted());
-            return taskRepository.save(existingTask);
+
+            Task savedTask = taskRepository.save(existingTask);
+            return toTaskDTO(savedTask);
         }
         throw new IllegalStateException("Task not found for the given user.");
     }
