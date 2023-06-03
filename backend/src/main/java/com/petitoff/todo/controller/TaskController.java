@@ -1,9 +1,11 @@
 package com.petitoff.todo.controller;
 
+import com.petitoff.todo.dto.TaskDTO;
 import com.petitoff.todo.model.Task;
 import com.petitoff.todo.model.User;
 import com.petitoff.todo.service.TaskService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +20,10 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task, @AuthenticationPrincipal User user) {
+    public ResponseEntity<TaskDTO> createUserTask(@AuthenticationPrincipal User user, @RequestBody Task task) {
         task.setUser(user);
-        Task savedTask = taskService.saveTask(task);
-        return ResponseEntity.ok(savedTask);
+        TaskDTO savedTaskDTO = taskService.saveTask(task);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTaskDTO);
     }
 
     @PutMapping("/{taskId}")
@@ -31,9 +33,9 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>> getUserTasks(@AuthenticationPrincipal User user) {
-        List<Task> tasks = taskService.findByUser(user);
-        return ResponseEntity.ok(tasks);
+    public ResponseEntity<List<TaskDTO>> getUserTasks(@AuthenticationPrincipal User user) {
+        List<TaskDTO> taskDTOs = taskService.findByUser(user);
+        return ResponseEntity.ok(taskDTOs);
     }
 
     @DeleteMapping("/{taskId}")

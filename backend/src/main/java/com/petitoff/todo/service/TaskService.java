@@ -1,5 +1,6 @@
 package com.petitoff.todo.service;
 
+import com.petitoff.todo.dto.TaskDTO;
 import com.petitoff.todo.model.Task;
 import com.petitoff.todo.model.User;
 import com.petitoff.todo.repository.TaskRepository;
@@ -8,18 +9,32 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class TaskService {
     private final TaskRepository taskRepository;
 
-    public Task saveTask(Task task) {
-        return taskRepository.save(task);
+    public TaskDTO saveTask(Task task) {
+        Task savedTask = taskRepository.save(task);
+        return toTaskDTO(savedTask);
     }
 
-    public List<Task> findByUser(User user) {
-        return taskRepository.findByUser(user);
+    public List<TaskDTO> findByUser(User user) {
+        List<Task> tasks = taskRepository.findByUser(user);
+        return tasks.stream()
+                .map(this::toTaskDTO)
+                .collect(Collectors.toList());
+    }
+
+    public TaskDTO toTaskDTO(Task task) {
+        return new TaskDTO(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getDeadline()
+        );
     }
 
     public Task updateTask(Long taskId, Task task, User user) {
