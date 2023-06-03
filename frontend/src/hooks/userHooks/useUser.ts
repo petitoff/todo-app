@@ -19,14 +19,10 @@ const useUser = (API_URL: string) => {
     if (isTokenValid(data.access_token)) {
       navigate("/login");
     }
-
-    console.log(data);
   });
 
   const loginUser = useMutation(async (user: Partial<User>) => {
     const { data } = await axios.post(`${API_URL}/auth/login`, user);
-
-    console.log(data);
 
     dispatch(
       setAuth({
@@ -37,11 +33,7 @@ const useUser = (API_URL: string) => {
     navigate("/");
   });
 
-  const { data: tasks } = useQuery(["tasks", auth?.id], () =>
-    axios.get(`${API_URL}/users/${auth?.id}/tasks`)
-  );
-
-  return { tasks, createUser, loginUser };
+  return { createUser, loginUser };
 };
 
 export default useUser;
