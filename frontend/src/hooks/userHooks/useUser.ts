@@ -1,15 +1,12 @@
-import { useQuery, useMutation } from "react-query";
+import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { User } from "../../types/User";
 import axios from "axios";
 import { setAuth } from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../hooks";
 import isTokenValid from "../../utils/isTokenValid";
 
 const useUser = (API_URL: string) => {
-  const auth = useAppSelector((state) => state.auth.user);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
