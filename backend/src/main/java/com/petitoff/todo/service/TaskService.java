@@ -33,6 +33,7 @@ public class TaskService {
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
+                task.isCompleted(),
                 task.getDeadline()
         );
     }
