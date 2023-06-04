@@ -1,14 +1,18 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Task } from "../../types/Task";
 
+type FilterCondition = "COMPLETED";
+
 export interface TaskState {
   tasks?: Task[];
   activeTask?: Task;
+  filterCondition?: FilterCondition;
 }
 
 const initialState: TaskState = {
   tasks: [],
   activeTask: undefined,
+  filterCondition: undefined,
 };
 
 export const taskSlice = createSlice({
@@ -59,6 +63,12 @@ export const taskSlice = createSlice({
     clearActiveTask: (state) => {
       state.activeTask = undefined;
     },
+    setFilterCondition: (
+      state,
+      action: PayloadAction<FilterCondition | undefined>
+    ) => {
+      state.filterCondition = action.payload;
+    },
   },
 });
 
@@ -69,5 +79,6 @@ export const {
   getTaskByIdAndSetItToActiveTask,
   setActiveTask,
   clearActiveTask,
+  setFilterCondition,
 } = taskSlice.actions;
 export default taskSlice.reducer;
