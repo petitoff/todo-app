@@ -5,8 +5,6 @@ import { useDispatch } from "react-redux";
 import { updateTask, removeTask } from "../../store/slices/taskSlice";
 import { useAppSelector } from "../hooks";
 
-import { FilterCondition } from "../../store/slices/taskSlice";
-
 const useTask = (API_URL: string) => {
   const BASE_URL = `${API_URL}/tasks`;
   const token = useAppSelector((state) => state.auth.token);

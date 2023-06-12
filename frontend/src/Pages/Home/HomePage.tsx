@@ -22,8 +22,6 @@ const HomePage = () => {
     dispatch(toggleSidebar());
   };
 
-  console.log(activeTask, panelName);
-
   return (
     <>
       <div className={styles.homePage}>

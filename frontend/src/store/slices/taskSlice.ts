@@ -50,6 +50,9 @@ export const taskSlice = createSlice({
         }
       });
     },
+    setTasks: (state, action: PayloadAction<Task[]>) => {
+      state.tasks = action.payload;
+    },
     removeTask: (state, action: PayloadAction<number>) => {
       state.tasks = state.tasks?.filter((task) => task.id !== action.payload);
     },
@@ -75,6 +78,7 @@ export const taskSlice = createSlice({
 export const {
   updateTask,
   updateTasks,
+  setTasks,
   removeTask,
   getTaskByIdAndSetItToActiveTask,
   setActiveTask,

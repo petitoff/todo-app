@@ -1,9 +1,10 @@
 import styles from "./TaskList.module.scss";
 import TaskCard from "../TaskCard/TaskCard";
 import { API_URL } from "../../config";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useEffect } from "react";
 import useTask from "../../hooks/tasksHooks/useTask";
+import { setTasks } from "../../store/slices/taskSlice";
 
 const TaskList = () => {
   const auth = useAppSelector((state) => state.auth);
@@ -11,7 +12,13 @@ const TaskList = () => {
 
   const { filteredTasks } = useTask(API_URL);
 
-  useEffect(() => {});
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!filteredTasks.data) return;
+
+    dispatch(setTasks(filteredTasks.data));
+  }, [filteredTasks, dispatch]);
 
   if (!auth.isAuth) {
     return <div>Please log in to view tasks.</div>;
@@ -19,7 +26,7 @@ const TaskList = () => {
 
   return (
     <div className={styles.container}>
-      {filteredTasks.data?.map((task) => (
+      {tasks?.map((task) => (
         <TaskCard key={task.id} task={task} />
       ))}
     </div>
