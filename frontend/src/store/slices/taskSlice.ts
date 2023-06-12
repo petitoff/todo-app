@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Task } from "../../types/Task";
 
-type FilterCondition = "COMPLETED";
+export type FilterCondition = "COMPLETED";
 
 export interface TaskState {
   tasks?: Task[];

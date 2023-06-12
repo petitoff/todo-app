@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-export type PanelName = "NEW_TASK" | "MENU";
+export type PanelName = "EDIT_TASK" | "NEW_TASK" | "MENU";
 
 export interface SidebarState {
   isOpen: boolean;

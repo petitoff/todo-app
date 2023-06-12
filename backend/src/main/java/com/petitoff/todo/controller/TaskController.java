@@ -33,8 +33,10 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskDTO>> getUserTasks(@AuthenticationPrincipal User user) {
-        List<TaskDTO> taskDTOs = taskService.findByUser(user);
+    public ResponseEntity<List<TaskDTO>> getUserTasks(
+            @AuthenticationPrincipal User user,
+            @RequestParam(value = "filter", required = false) String filter) {
+        List<TaskDTO> taskDTOs = taskService.findByUser(user, filter);
         return ResponseEntity.ok(taskDTOs);
     }
 

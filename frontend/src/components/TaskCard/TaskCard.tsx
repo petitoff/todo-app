@@ -1,6 +1,7 @@
 import { API_URL } from "../../config";
 import { useAppDispatch } from "../../hooks/hooks";
 import useTask from "../../hooks/tasksHooks/useTask";
+import { setPanelName, toggleSidebar } from "../../store/slices/sidebarSlice";
 import {
   clearActiveTask,
   getTaskByIdAndSetItToActiveTask,
@@ -21,6 +22,8 @@ const TaskCard = ({ task }: Props) => {
 
   const handleSetActiveTask = () => {
     dispatch(getTaskByIdAndSetItToActiveTask(task.id));
+    dispatch(setPanelName("EDIT_TASK"));
+    dispatch(toggleSidebar());
   };
 
   const formatDate = (isoDateString?: string) => {
@@ -39,7 +42,7 @@ const TaskCard = ({ task }: Props) => {
 
   const handleCompleteTask = () => {
     if (task) {
-      const completedTask: Task = { ...task, completed: true };
+      const completedTask: Task = { ...task, completed: !task.completed };
       updateTask(completedTask);
       dispatch(clearActiveTask());
     }

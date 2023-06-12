@@ -21,11 +21,14 @@ public class TaskService {
         return toTaskDTO(savedTask);
     }
 
-    public List<TaskDTO> findByUser(User user) {
+    public List<TaskDTO> findByUser(User user, String filter) {
         List<Task> tasks = taskRepository.findByUser(user);
-        return tasks.stream()
-                .map(this::toTaskDTO)
-                .collect(Collectors.toList());
+        if (filter != null && filter.equalsIgnoreCase("COMPLETED")) {
+            tasks = tasks.stream()
+                    .filter(Task::isCompleted)
+                    .collect(Collectors.toList());
+        }
+        return tasks.stream().map(this::toTaskDTO).collect(Collectors.toList());
     }
 
     public TaskDTO toTaskDTO(Task task) {

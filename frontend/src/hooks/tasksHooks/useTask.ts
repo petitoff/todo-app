@@ -1,17 +1,20 @@
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Task } from "../../types/Task";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { updateTask, removeTask } from "../../store/slices/taskSlice";
 import { useAppSelector } from "../hooks";
 
+import { FilterCondition } from "../../store/slices/taskSlice";
+
 const useTask = (API_URL: string) => {
   const BASE_URL = `${API_URL}/tasks`;
   const token = useAppSelector((state) => state.auth.token);
 
+  const filter = useAppSelector((state) => state.task.filterCondition);
+
   const dispatch = useDispatch();
 
-  // Create an axios instance with the Authorization header
   const axiosInstance = axios.create({
     headers: {
       Authorization: `Bearer ${token}`,
@@ -111,10 +114,23 @@ const useTask = (API_URL: string) => {
     }
   };
 
+  const filteredTasks = useQuery<Task[], [filter?: string]>(
+    ["tasks", filter],
+    () => {
+      if (filter) {
+        return axiosInstance
+          .get(`${BASE_URL}?filter=${filter}`)
+          .then((res) => res.data);
+      }
+      return axiosInstance.get(`${BASE_URL}`).then((res) => res.data);
+    }
+  );
+
   return {
     createTask: createTaskExistingTask,
     updateTask: updateTaskExistingTask,
     deleteTask: deleteTaskExistingTask,
+    filteredTasks,
     isLoading:
       createTaskMutation.isLoading ||
       deleteTaskMutation.isLoading ||
