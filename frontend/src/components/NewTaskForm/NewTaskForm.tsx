@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { Task } from "../../types/Task";
 import { API_URL } from "../../config";
 import { toggleSidebar } from "../../store/slices/sidebarSlice";
+import { Close } from "@mui/icons-material";
+import { clearActiveTask } from "../../store/slices/taskSlice";
 
 const NewTaskForm = () => {
   const user = useAppSelector((state) => state.auth.user);
@@ -35,10 +37,19 @@ const NewTaskForm = () => {
     dispatch(toggleSidebar());
   };
 
+  const handleCloseSidebar = () => {
+    dispatch(clearActiveTask());
+    dispatch(toggleSidebar());
+  };
+
   return (
     <div className={styles.newTaskFormContainer}>
       <div>
-        <h1>NEW TASK</h1>
+        <div className={styles["header-container"]}>
+          <h1>NEW TASK</h1>
+          <Close className={styles.icon} onClick={handleCloseSidebar} />
+        </div>
+
         <GradientInput
           title="Name"
           placeholder="Enter name of task"

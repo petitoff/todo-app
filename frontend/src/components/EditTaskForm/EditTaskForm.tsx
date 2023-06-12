@@ -7,6 +7,7 @@ import GradientInput from "../common/GradientInput/GradientInput";
 import useTask from "../../hooks/tasksHooks/useTask";
 import { clearActiveTask } from "../../store/slices/taskSlice";
 import { toggleSidebar } from "../../store/slices/sidebarSlice";
+import { Close } from "@mui/icons-material";
 
 interface Props {
   activeTask?: Task;
@@ -36,10 +37,19 @@ const EditTaskForm = ({ activeTask }: Props) => {
     dispatch(toggleSidebar());
   };
 
+  const handleCloseSidebar = () => {
+    dispatch(clearActiveTask());
+    dispatch(toggleSidebar());
+  };
+
   return (
     <div className={styles.newTaskFormContainer}>
       <div>
-        <h1>Edit TASK</h1>
+        <div className={styles["header-container"]}>
+          <h1>Edit TASK</h1>
+          <Close className={styles.icon} onClick={handleCloseSidebar} />
+        </div>
+
         <GradientInput
           title="Name"
           placeholder="Enter name of task"

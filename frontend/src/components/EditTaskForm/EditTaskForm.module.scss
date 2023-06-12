@@ -8,46 +8,68 @@
     font-size: 1.5rem;
     color: #bfbfbf;
   }
-}
 
-.descriptionInput {
-  resize: none; /* disable resizing */
-  border-color: rgba(24, 23, 67, 0.2);
-  border-radius: 0.7rem;
-  height: 12rem;
-  // width: 100%; /* adjust the width as needed */
-  padding: 1rem; /* add some padding */
-  font-family: inherit; /* use the same font as other inputs */
-}
+  @media screen and (max-width: 593px) {
+    width: 100vw;
 
-.separator {
-  margin: 2rem 0;
-}
+    & h2 {
+      font-size: 1.2rem;
+    }
+  }
 
-.button {
-  margin-right: 0.5rem;
-}
+  .header-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
 
-.button:last-child {
-  margin: 0;
-}
+    .icon {
+      color: #bfbfbf;
+      font-size: 1.5rem;
+      margin-left: 2rem;
+      margin-right: 0.5rem;
+      cursor: pointer;
+    }
+  }
 
-.gradient-button {
-  background-image: linear-gradient(to left, #00ffff 0%, #254dde 100%);
-  border: none;
-  border-radius: 1.8rem;
-  height: 4rem;
-  width: 9rem;
-  color: #fff;
-  cursor: pointer;
-}
+  .descriptionInput {
+    resize: none; /* disable resizing */
+    border-color: rgba(24, 23, 67, 0.2);
+    border-radius: 0.7rem;
+    height: 12rem;
+    // width: 100%; /* adjust the width as needed */
+    padding: 1rem; /* add some padding */
+    font-family: inherit; /* use the same font as other inputs */
+  }
 
-.gradient-delete-button {
-  background-image: linear-gradient(to left, #f76565 0%, #de2525 100%);
-  border: none;
-  border-radius: 1.8rem;
-  height: 4rem;
-  width: 9rem;
-  color: #fff;
-  cursor: pointer;
+  .separator {
+    margin: 2rem 0;
+  }
+
+  .button {
+    margin-right: 0.5rem;
+  }
+
+  .button:last-child {
+    margin: 0;
+  }
+
+  .gradient-button {
+    background-image: linear-gradient(to left, #00ffff 0%, #254dde 100%);
+    border: none;
+    border-radius: 1.8rem;
+    height: 4rem;
+    width: 9rem;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .gradient-delete-button {
+    background-image: linear-gradient(to left, #f76565 0%, #de2525 100%);
+    border: none;
+    border-radius: 1.8rem;
+    height: 4rem;
+    width: 9rem;
+    color: #fff;
+    cursor: pointer;
+  }
 }

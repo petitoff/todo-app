@@ -8,6 +8,28 @@
     font-size: 1.5rem;
     color: #bfbfbf;
   }
+
+  @media screen and (max-width: 593px) {
+    width: 100vw;
+
+    & h2 {
+      font-size: 1.2rem;
+    }
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    .icon {
+      color: #bfbfbf;
+      font-size: 1.5rem;
+      margin-left: 2rem;
+      margin-right: 0.5rem;
+      cursor: pointer;
+    }
+  }
 }
 
 .descriptionInput {
