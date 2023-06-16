@@ -18,9 +18,14 @@ interface Props {
 const TaskForm = ({ activeTask, isEditMode = false }: Props) => {
   const user = useAppSelector((state) => state.auth.user);
   const [taskData, setTaskData] = useState<Partial<Task>>({
-    ...(isEditMode ? activeTask : { title: "", description: "", deadline: "" }),
+    ...(isEditMode && activeTask
+      ? {
+          title: activeTask.title,
+          description: activeTask.description,
+          deadline: activeTask.deadline,
+        }
+      : { title: "", description: "", deadline: "" }),
   });
-  // const [subTasksInputCount, setSubTasksInputCount] = useState<number>(1);
 
   const {
     createTask,
@@ -44,8 +49,8 @@ const TaskForm = ({ activeTask, isEditMode = false }: Props) => {
     )
       return;
 
-    if (isEditMode) {
-      updateTaskHook(taskData);
+    if (isEditMode && activeTask) {
+      updateTaskHook({ ...activeTask, ...taskData });
     } else {
       createTask(user.email, taskData);
     }
@@ -56,7 +61,7 @@ const TaskForm = ({ activeTask, isEditMode = false }: Props) => {
 
   const handleDeleteTask = () => {
     if (activeTask) {
-      deleteTask(activeTask.id!);
+      deleteTask(activeTask.id);
     }
     dispatch(clearActiveTask());
     dispatch(toggleSidebar());
@@ -68,19 +73,27 @@ const TaskForm = ({ activeTask, isEditMode = false }: Props) => {
   };
 
   const handleAddSubTask = (subtask: Task) => {
-    createSubTask(activeTask?.id, subtask);
+    if (activeTask) {
+      createSubTask(activeTask.id, subtask);
+    }
   };
 
   const handleUpdateSubTask = (subtask: Task) => {
-    updateSubTask(activeTask?.id, subtask);
+    if (activeTask) {
+      updateSubTask(activeTask.id, subtask);
+    }
   };
 
   const handleDeleteSubTask = (id: number) => {
-    deleteSubTask(activeTask?.id, id);
+    if (activeTask) {
+      deleteSubTask(activeTask.id, id);
+    }
   };
 
   useEffect(() => {
-    if (activeTask) dispatch(updateTask(activeTask));
+    if (activeTask) {
+      dispatch(updateTask(activeTask));
+    }
   }, [activeTask, dispatch]);
 
   return (
@@ -94,19 +107,15 @@ const TaskForm = ({ activeTask, isEditMode = false }: Props) => {
         <GradientInput
           title="Name"
           placeholder="Enter name of task"
-          value={taskData.title}
+          value={taskData.title || ""}
           setValue={(value) => setTaskData({ ...taskData, title: value })}
         />
 
         <div className={styles.separator} />
-        {/* 
-        {Array.from({ length: subTasksInputCount }, (_, index) => (
-          <SubTaskInForm key={index} handleSubTaskChange={handleAddSubTask} />
-        ))} */}
 
-        {isEditMode && (
+        {isEditMode && activeTask && (
           <>
-            {activeTask?.subTasks?.map((subTask) => (
+            {activeTask.subTasks?.map((subTask) => (
               <SubTaskInForm
                 key={subTask.id}
                 id={subTask.id}
@@ -115,10 +124,6 @@ const TaskForm = ({ activeTask, isEditMode = false }: Props) => {
                 handleSubTaskChange={handleUpdateSubTask}
               />
             ))}
-
-            {/* {Array.from({ length: subTasksInputCount }, (_, index) => (
-          <SubTaskInForm key={index} handleSubTaskChange={handleAddSubTask} />
-        ))} */}
 
             <SubTaskInForm
               handleDeleteSubTask={handleDeleteSubTask}
@@ -135,7 +140,7 @@ const TaskForm = ({ activeTask, isEditMode = false }: Props) => {
           name="description"
           placeholder="Enter description of task"
           className={styles.descriptionInput}
-          value={taskData.description}
+          value={taskData.description || ""}
           onChange={(e) =>
             setTaskData({ ...taskData, description: e.target.value })
           }
@@ -148,13 +153,14 @@ const TaskForm = ({ activeTask, isEditMode = false }: Props) => {
           type="datetime-local"
           id="deadline"
           name="deadline"
-          value={taskData.deadline}
+          value={taskData.deadline || ""}
           onChange={(e) =>
             setTaskData({ ...taskData, deadline: e.target.value })
           }
         />
 
         <div className={styles.separator} />
+
         <button
           className={`${styles.button} ${styles["gradient-button"]}`}
           onClick={handleSubmit}

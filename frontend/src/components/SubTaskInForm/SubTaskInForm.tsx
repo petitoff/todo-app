@@ -26,6 +26,10 @@ const SubTaskInForm = ({
         completed: false,
       };
       handleSubTaskChange(newSubtask);
+
+      if (!title) {
+        setSubtaskTitle("");
+      }
     }
   };
 
