@@ -1,8 +1,10 @@
 package com.petitoff.todo.service;
 
 import com.petitoff.todo.dto.TaskDTO;
+import com.petitoff.todo.model.SubTask;
 import com.petitoff.todo.model.Task;
 import com.petitoff.todo.model.User;
+import com.petitoff.todo.repository.SubTaskRepository;
 import com.petitoff.todo.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class TaskService {
     private final TaskRepository taskRepository;
+    private final SubTaskRepository subTaskRepository;
 
     public TaskDTO saveTask(Task task) {
         Task savedTask = taskRepository.save(task);
@@ -31,14 +34,34 @@ public class TaskService {
         return tasks.stream().map(this::toTaskDTO).collect(Collectors.toList());
     }
 
+    private List<TaskDTO> toTaskDTOList(List<Task> tasks) {
+        return tasks.stream().map(this::toTaskDTO).collect(Collectors.toList());
+    }
+
     public TaskDTO toTaskDTO(Task task) {
         return new TaskDTO(
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
                 task.isCompleted(),
-                task.getDeadline()
+                task.getDeadline(),
+                toSubTaskDTOList(task.getSubTasks())
         );
+    }
+
+    public TaskDTO toSubTaskDTO(SubTask subTask) {
+        return new TaskDTO(
+                subTask.getId(),
+                subTask.getTitle(),
+                subTask.getDescription(),
+                subTask.isCompleted(),
+                subTask.getDeadline(),
+                null // SubTasks nie mają swoich podzadań (nie są zagnieżdżone)
+        );
+    }
+
+    private List<TaskDTO> toSubTaskDTOList(List<SubTask> subTasks) {
+        return subTasks.stream().map(this::toSubTaskDTO).collect(Collectors.toList());
     }
 
     public TaskDTO updateTask(Long taskId, Task task, User user) {
@@ -62,5 +85,39 @@ public class TaskService {
         } else {
             throw new IllegalStateException("Task not found for the given user.");
         }
+    }
+
+    public Task findByIdAndUser(Long id, User user) {
+        return taskRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new IllegalStateException("Task not found for the given id and user."));
+    }
+
+    public TaskDTO saveSubTask(SubTask subTask) {
+        SubTask savedSubTask = subTaskRepository.save(subTask);
+        return toSubTaskDTO(savedSubTask);
+    }
+
+    public TaskDTO updateSubTask(Long taskId, Long subTaskId, SubTask updatedSubTask, User user) {
+        Task parentTask = findByIdAndUser(taskId, user);
+        SubTask currentSubTask = findSubTaskByIdAndUser(subTaskId, user);
+
+        if (currentSubTask.getParentTask().equals(parentTask)) {
+            updatedSubTask.setId(subTaskId);
+            updatedSubTask.setUser(user);
+            updatedSubTask.setParentTask(parentTask);
+            return saveSubTask(updatedSubTask);
+        } else {
+            throw new IllegalStateException("Subtask not found for the given parent task and user.");
+
+        }
+    }
+
+    public void deleteSubTask(SubTask subTask) {
+        subTaskRepository.delete(subTask);
+    }
+
+    public SubTask findSubTaskByIdAndUser(Long id, User user) {
+        return subTaskRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new IllegalStateException("Subtask not found for the given id and user."));
     }
 }

@@ -72,6 +72,32 @@ export const taskSlice = createSlice({
     ) => {
       state.filterCondition = action.payload;
     },
+    addSubTaskToActiveTask: (state, action: PayloadAction<Task>) => {
+      if (!state.activeTask?.subTasks) {
+        return;
+      }
+
+      const subTaskIndex = state.activeTask.subTasks.findIndex(
+        (subTask) => subTask.id === action.payload.id
+      );
+
+      if (subTaskIndex >= 0) {
+        // Subtask istnieje, zaktualizuj go
+        state.activeTask.subTasks[subTaskIndex] = action.payload;
+      } else {
+        // Subtask nie istnieje, dodaj go do listy
+        state.activeTask.subTasks.push(action.payload);
+      }
+    },
+    removeSubTaskFromActiveTask: (state, action: PayloadAction<number>) => {
+      if (!state.activeTask?.subTasks) {
+        return;
+      }
+
+      state.activeTask.subTasks = state.activeTask.subTasks.filter(
+        (subTask) => subTask.id !== action.payload
+      );
+    },
   },
 });
 
@@ -84,5 +110,7 @@ export const {
   setActiveTask,
   clearActiveTask,
   setFilterCondition,
+  addSubTaskToActiveTask,
+  removeSubTaskFromActiveTask,
 } = taskSlice.actions;
 export default taskSlice.reducer;

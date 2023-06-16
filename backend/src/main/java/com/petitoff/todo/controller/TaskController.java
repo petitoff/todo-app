@@ -1,6 +1,7 @@
 package com.petitoff.todo.controller;
 
 import com.petitoff.todo.dto.TaskDTO;
+import com.petitoff.todo.model.SubTask;
 import com.petitoff.todo.model.Task;
 import com.petitoff.todo.model.User;
 import com.petitoff.todo.service.TaskService;
@@ -44,5 +45,33 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId, @AuthenticationPrincipal User user) {
         taskService.deleteTask(taskId, user);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{taskId}/subtasks")
+    public ResponseEntity<TaskDTO> createSubTask(@AuthenticationPrincipal User user, @PathVariable Long taskId, @RequestBody SubTask subTask) {
+        Task parentTask = taskService.findByIdAndUser(taskId, user); // Pobieranie zadania nadrzędnego
+        subTask.setParentTask(parentTask);
+        subTask.setUser(user);
+        TaskDTO savedSubTaskDTO = taskService.saveSubTask(subTask);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedSubTaskDTO);
+    }
+
+    @PutMapping("/{taskId}/subtasks/{subTasksId}")
+    public ResponseEntity<TaskDTO> updateSubTask(@PathVariable Long taskId, @PathVariable Long subTasksId, @RequestBody SubTask updatedSubTask, @AuthenticationPrincipal User user) {
+        TaskDTO updatedSubTaskDto = taskService.updateSubTask(taskId, subTasksId, updatedSubTask, user);
+        return ResponseEntity.ok().body(updatedSubTaskDto);
+    }
+
+    @DeleteMapping("/{taskId}/subtasks/{subTaskId}")
+    public ResponseEntity<Void> deleteSubTask(@PathVariable Long taskId, @PathVariable Long subTaskId, @AuthenticationPrincipal User user) {
+        Task parentTask = taskService.findByIdAndUser(taskId, user); // Pobieranie zadania nadrzędnego
+        SubTask subTask = taskService.findSubTaskByIdAndUser(subTaskId, user); // Pobieranie podzadania do usunięcia
+        if (subTask.getParentTask().equals(parentTask)) {
+            parentTask.removeSubTask(subTask); // Usuwanie powiązania między Task a SubTask
+            taskService.deleteSubTask(subTask); // Usuwanie SubTask z bazy danych
+            return ResponseEntity.noContent().build();
+        } else {
+            throw new IllegalStateException("Subtask not found for the given parent task and user.");
+        }
     }
 }

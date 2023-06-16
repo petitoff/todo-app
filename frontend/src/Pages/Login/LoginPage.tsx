@@ -2,7 +2,7 @@ import { useState } from "react";
 import useUser from "../../hooks/userHooks/useUser";
 import { API_URL } from "../../config";
 import { User } from "../../types/User";
-import AuthForm from "../../components/common/AuthForm/AuthForm";
+import AuthForm from "../../components/AuthForm/AuthForm";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");

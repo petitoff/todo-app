@@ -1,12 +1,11 @@
 package com.petitoff.todo.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -27,4 +26,18 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "parentTask", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubTask> subTasks = new ArrayList<>();
+
+    public void addSubTask(SubTask subTask) {
+        subTasks.add(subTask);
+        subTask.setParentTask(this);
+    }
+
+    public void removeSubTask(SubTask subTask) {
+        subTasks.remove(subTask);
+        subTask.setParentTask(null);
+    }
 }

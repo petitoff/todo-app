@@ -4,4 +4,6 @@ export type Task = {
   description?: string;
   completed: boolean;
   deadline?: string;
+
+  subTasks?: Task[];
 };
