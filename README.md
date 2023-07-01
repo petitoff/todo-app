@@ -2,7 +2,7 @@
 
 ## Description
 
-Todo App is a task management application. It allows users to create, edit, delete and view tasks and their subtasks. The application consists of two main parts: a backend (API) written in Spring Boot and a frontend created using React.js.
+Todo App is a task management application. It allows users to create, edit, delete and view tasks and their subtasks. The application consists of two main parts: a backend (RESTFUL API) written in Spring Boot and a frontend created using React.js.
 
 ## Project Structure
 
