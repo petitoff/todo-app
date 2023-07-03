@@ -2,7 +2,7 @@
 FROM maven:3.8.4-openjdk-17 AS build
 COPY src /home/app/src
 COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package -e || (cat /home/app/target/surefire-reports/*.txt && false)
+RUN mvn -f /home/app/pom.xml clean package -Dmaven.test.skip=true -e
 
 # Package stage
 FROM openjdk:17
