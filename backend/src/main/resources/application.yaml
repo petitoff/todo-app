@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://snuffleupagus.db.elephantsql.com/gyqcbvfy
-    username: gyqcbvfy
-    password: GUejMM9xH8BSSB5n3Cc19C6dSPsnc98A
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -17,7 +17,7 @@ spring:
 application:
   security:
     jwt:
-      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      secret-key: ${APPLICATION_SECURITY_JWT_SECRET_KEY}
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
