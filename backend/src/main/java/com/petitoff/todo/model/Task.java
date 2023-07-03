@@ -31,11 +31,6 @@ public class Task {
     @OneToMany(mappedBy = "parentTask", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubTask> subTasks = new ArrayList<>();
 
-    public void addSubTask(SubTask subTask) {
-        subTasks.add(subTask);
-        subTask.setParentTask(this);
-    }
-
     public void removeSubTask(SubTask subTask) {
         subTasks.remove(subTask);
         subTask.setParentTask(null);
