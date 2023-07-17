@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://snuffleupagus.db.elephantsql.com/gyqcbvfy
-    username: gyqcbvfy
-    password: GUejMM9xH8BSSB5n3Cc19C6dSPsnc98A
+    url: jdbc:postgresql://dpg-ciqibr5ph6ej5vghume0-a.frankfurt-postgres.render.com/todo_app_database
+    username: todo_app_database_user
+    password: d5FqHGrCavNuRBWtTrbAcAlA9a8XmKwB
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -15,7 +15,7 @@ spring:
 application:
   security:
     jwt:
-      secret-key: ${APPLICATION_SECURITY_JWT_SECRET_KEY}
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
