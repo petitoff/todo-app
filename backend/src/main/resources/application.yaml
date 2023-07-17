@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/todo
-    username: postgres
-    password: Power!#2123
+    url: jdbc:postgresql://snuffleupagus.db.elephantsql.com/gyqcbvfy
+    username: gyqcbvfy
+    password: GUejMM9xH8BSSB5n3Cc19C6dSPsnc98A
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -11,8 +11,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 application:
   security:
