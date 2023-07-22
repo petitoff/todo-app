@@ -71,6 +71,7 @@ public class TaskService {
             existingTask.setTitle(task.getTitle());
             existingTask.setDescription(task.getDescription());
             existingTask.setCompleted(task.isCompleted());
+            existingTask.setDeadline(task.getDeadline());
 
             Task savedTask = taskRepository.save(existingTask);
             return toTaskDTO(savedTask);
