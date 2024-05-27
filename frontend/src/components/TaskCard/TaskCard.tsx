@@ -5,6 +5,7 @@ import { setPanelName, toggleSidebar } from "../../store/slices/sidebarSlice";
 import {
   clearActiveTask,
   getTaskByIdAndSetItToActiveTask,
+  updateTask as updateTaskAction,
 } from "../../store/slices/taskSlice";
 import { Task } from "../../types/Task";
 import styles from "./TaskCard.module.scss";
@@ -15,7 +16,6 @@ interface Props {
 }
 
 const TaskCard = ({ task }: Props) => {
-  // const activeTask = useAppSelector((state) => state.task.activeTask);
   const dispatch = useAppDispatch();
 
   const { updateTask } = useTask(API_URL);
@@ -40,10 +40,18 @@ const TaskCard = ({ task }: Props) => {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  const handleCompleteTask = () => {
+  const handleCompleteTask = async () => {
     if (task) {
       const completedTask: Task = { ...task, completed: !task.completed };
-      updateTask(completedTask);
+      // Optimistically update the state
+      dispatch(updateTaskAction(completedTask));
+      try {
+        // Make the API call to update the task
+        await updateTask(completedTask);
+      } catch (error) {
+        console.error("Failed to update task:", error);
+        // Optionally, you can dispatch another action to revert the state if the API call fails
+      }
       dispatch(clearActiveTask());
     }
   };

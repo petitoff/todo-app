@@ -21,16 +21,18 @@ export const taskSlice = createSlice({
   reducers: {
     updateTask: (state, action: PayloadAction<Task>) => {
       const newTask = action.payload;
-      const existingTaskIndex = state.tasks?.findIndex(
+      if (!state.tasks) return;
+
+      const existingTaskIndex = state.tasks.findIndex(
         (task) => task.id === newTask.id
       );
 
-      if (existingTaskIndex !== undefined && existingTaskIndex !== -1) {
+      if (existingTaskIndex !== -1) {
         // Replace the existing task with the new task
-        state.tasks![existingTaskIndex] = newTask;
+        state.tasks[existingTaskIndex] = newTask;
       } else {
         // Add the new task to the existing tasks
-        state.tasks?.push(newTask);
+        state.tasks.push(newTask);
       }
     },
     updateTasks: (state, action: PayloadAction<Task[]>) => {
